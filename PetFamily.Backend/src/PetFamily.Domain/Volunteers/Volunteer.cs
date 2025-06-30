@@ -3,21 +3,21 @@ using PetFamily.Domain.Pets;
 
 namespace PetFamily.Domain.Volunteers;
 
-public class Volunteer
+public class Volunteer : Shared.Entity<VolunteerId>
 {
     private readonly List<Pet> _pets = [];
     
     // ef core
-    private Volunteer()
+    private Volunteer(VolunteerId id)
+        : base(id)
     {
     }
 
-    private Volunteer(string description)
+    private Volunteer(VolunteerId id, string description)
+        : base(id)
     {
         Description = description;
     }
-    
-    public Guid Id { get; private set; }
     
     public InformationAboutVolunteer InformationAboutVolunteer { get; private set; }
     
@@ -42,7 +42,7 @@ public class Volunteer
         if(string.IsNullOrWhiteSpace(description))
             return Result.Failure<Volunteer>("Invalid description.");
         
-        var volunteer = new Volunteer(description);
+        var volunteer = new Volunteer(VolunteerId.NewVolunteerId(), description);
         
         return Result.Success(volunteer);
     }

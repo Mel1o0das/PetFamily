@@ -2,14 +2,16 @@
 
 namespace PetFamily.Domain.Pets;
 
-public class Pet
+public class Pet : Shared.Entity<PetId>
 {
     // ef core
-    private Pet()
+    private Pet(PetId id) 
+        : base(id)
     {
     }
 
-    private Pet(string name, string description, string breed, string color, string phoneNumber)
+    private Pet(PetId id, string name, string description, string breed, string color, string phoneNumber)
+        : base(id)
     {
         Name = name;
         Description = description;
@@ -17,8 +19,6 @@ public class Pet
         Color = color;
         PhoneNumber = phoneNumber;
     }
-    
-    public Guid Id { get; private set; }
 
     public string Name { get; private set; }
     
@@ -31,7 +31,7 @@ public class Pet
     public string Color { get; private set; }
     
     public InformationAboutHealth? InformationAboutHealth { get; private set; }
-    
+
     public Address Address { get; private set; }
     
     public string PhoneNumber { get; private set; }
@@ -61,7 +61,7 @@ public class Pet
         if (string.IsNullOrWhiteSpace(phoneNumber))
             return Result.Failure<Pet>("Phone number is required");
         
-        var pet = new Pet(name, description, breed, color, phoneNumber);
+        var pet = new Pet(PetId.NewPetId(), name, description, breed, color, phoneNumber);
         
         return Result.Success(pet);
     }
