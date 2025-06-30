@@ -4,7 +4,7 @@ namespace PetFamily.Domain.Pets;
 
 public class Pet
 {
-    //ef core
+    // ef core
     private Pet()
     {
     }
