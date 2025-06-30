@@ -4,13 +4,14 @@ namespace PetFamily.Domain.Volunteers;
 
 public record InformationAboutVolunteer
 {
-    private InformationAboutVolunteer(string surname, string name, string patronymic, string email, string phoneNumber)
+    private InformationAboutVolunteer(string surname, string name, string patronymic, string email, string phoneNumber, int experience)
     {
         Surname = surname;
         Name = name;
         Patronymic = patronymic;
         Email = email;
         PhoneNumber = phoneNumber;
+        Experience = experience;
     }
     
     public string Surname { get; }
@@ -22,13 +23,16 @@ public record InformationAboutVolunteer
     public string Email { get; }
     
     public string PhoneNumber { get; }
+    
+    public int Experience { get; }
 
     public static Result<InformationAboutVolunteer> Create(
         string surname, 
         string name, 
         string patronymic, 
         string email,
-        string phoneNumber)
+        string phoneNumber,
+        int experience)
     {
         if (string.IsNullOrWhiteSpace(surname))
             return Result.Failure<InformationAboutVolunteer>("Surname is required");
@@ -45,6 +49,9 @@ public record InformationAboutVolunteer
         if(string.IsNullOrWhiteSpace(phoneNumber))
             return Result.Failure<InformationAboutVolunteer>("Phone number is required");
         
-        return new InformationAboutVolunteer(surname, name, patronymic, email, phoneNumber);
+        if(experience < 0)
+            return Result.Failure<InformationAboutVolunteer>("Experience cannot be negative");
+        
+        return new InformationAboutVolunteer(surname, name, patronymic, email, phoneNumber, experience);
     }
 }
