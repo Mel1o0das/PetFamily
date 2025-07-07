@@ -5,13 +5,13 @@ namespace PetFamily.Domain.Species;
 public class Breed : Shared.Entity<BreedId>
 {
     // ef core
-    private Breed(BreedId breedId)
-        : base(breedId)
+    private Breed(BreedId id)
+        : base(id)
     {
     }
 
-    private Breed(BreedId breedId, string name)
-        : base(breedId)
+    private Breed(BreedId id, string name)
+        : base(id)
     {
         Name = name;
     }

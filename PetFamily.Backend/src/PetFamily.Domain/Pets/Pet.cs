@@ -42,7 +42,7 @@ public class Pet : Shared.Entity<PetId>
     
     public string Color { get; private set; }
     
-    public InformationAboutHealth? InformationAboutHealth { get; private set; }
+    public InformationAboutHealth InformationAboutHealth { get; private set; }
 
     public Address Address { get; private set; }
     
