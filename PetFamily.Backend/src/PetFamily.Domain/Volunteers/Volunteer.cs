@@ -3,10 +3,9 @@ using PetFamily.Domain.Pets;
 
 namespace PetFamily.Domain.Volunteers;
 
-public class Volunteer : Shared.Entity<VolunteerId>
+public sealed class Volunteer : Shared.Entity<VolunteerId>
 {
     private readonly List<Pet> _pets = [];
-    private readonly List<SocialNetworks> _socialNetworks = [];
 
     // ef core
     private Volunteer(VolunteerId id)
@@ -30,7 +29,7 @@ public class Volunteer : Shared.Entity<VolunteerId>
     
     public string Description { get; private set; }
 
-    public IReadOnlyList<SocialNetworks> SocialNetworks => _socialNetworks;
+    public SocialNetworksDetails SocialNetworksDetails { get; private set; }
     
     public DetailsForHelp DetailsForHelp { get; private set; }
 

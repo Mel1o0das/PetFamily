@@ -12,4 +12,6 @@ public record PetId
     public static PetId NewPetId() => new PetId(Guid.NewGuid());
     
     public static PetId EmptyPetId() => new PetId(Guid.Empty);
+
+    public static PetId Create(Guid id) => new(id);
 }

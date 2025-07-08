@@ -12,4 +12,6 @@ public record SpeciesId
     public static SpeciesId NewSpeciesId() => new SpeciesId(Guid.NewGuid());
     
     public static SpeciesId EmptySpeciesId() => new SpeciesId(Guid.Empty);
+
+    public static SpeciesId Create(Guid id) => new(id);
 }
