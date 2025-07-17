@@ -1,4 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
+using PetFamily.Domain.Shared;
 
 namespace PetFamily.Domain.Pets;
 
@@ -56,7 +57,7 @@ public class Pet : Shared.Entity<PetId>
     
     public DateTime DateCreated { get; private set; } = DateTime.Now;
 
-    public static Result<Pet> Create(
+    public static Result<Pet, Error> Create(
         string name, 
         string description, 
         SpeciesBreed? speciesBreed,
@@ -68,28 +69,28 @@ public class Pet : Shared.Entity<PetId>
         string phoneNumber)
     {
         if (string.IsNullOrWhiteSpace(name))
-            return Result.Failure<Pet>("Name is required");
+            return Errors.General.ValueIsInvalid("Pet name");
         
         if (string.IsNullOrWhiteSpace(description))
-            return Result.Failure<Pet>("Description is required");
+            return Errors.General.ValueIsInvalid("Pet description");
         
         if (speciesBreed is null)
-            return Result.Failure<Pet>("Species Breed is required");
+            return Errors.General.ValueIsInvalid("Species breed");
         
         if (string.IsNullOrWhiteSpace(color))
-            return Result.Failure<Pet>("Color is required");
+            return Errors.General.ValueIsInvalid("Pet color");
         
         if(informationAboutHealth is null)
-            return Result.Failure<Pet>("Information About Health is required");
+            return Errors.General.ValueIsInvalid("Information about health");
         
         if (address is null)
-            return Result.Failure<Pet>("Address is required");
+            return Errors.General.ValueIsInvalid("Address");
         
         if (detailsForHelp is null)
-            return Result.Failure<Pet>("Details For Help is required");
+            return Errors.General.ValueIsInvalid("Details for help");
         
         if (string.IsNullOrWhiteSpace(phoneNumber))
-            return Result.Failure<Pet>("Phone number is required");
+            return Errors.General.ValueIsInvalid("PhoneNumber");
         
         var pet = new Pet(
             PetId.NewPetId(), 
@@ -103,6 +104,6 @@ public class Pet : Shared.Entity<PetId>
             detailsForHelp, 
             phoneNumber);
         
-        return Result.Success(pet);
+        return pet;
     }
 }

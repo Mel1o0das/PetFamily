@@ -1,4 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
+using PetFamily.Domain.Shared;
 
 namespace PetFamily.Domain.Pets;
 
@@ -14,10 +15,10 @@ public record DetailsForHelp
     
     public string Description { get; }
 
-    public static Result<DetailsForHelp> Create(string requisites, string description)
+    public static Result<DetailsForHelp, Error> Create(string requisites, string description)
     {
         if (string.IsNullOrWhiteSpace(requisites))
-            return Result.Failure<DetailsForHelp>("Required parameters are required");
+            return Errors.General.ValueIsRequired("requisites");
         
         return new DetailsForHelp(requisites, description);
     }
