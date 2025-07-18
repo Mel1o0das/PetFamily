@@ -15,12 +15,12 @@ public class VolunteersRepository : IVolunteersRepository
         _dbContext = dbContext;
     }
 
-    public async Task<Result<Volunteer, Error>> GetById(VolunteerId volunteerId)
+    public async Task<Result<Volunteer, Error>> GetById(Guid volunteerId, CancellationToken cancellationToken = default)
     {
         var volunteer = await _dbContext.Volunteers
             .Include(v => v.Pets)
             .ThenInclude(p => p.SpeciesBreed)
-            .FirstOrDefaultAsync(v => v.Id == volunteerId);
+            .FirstOrDefaultAsync(v => v.Id == volunteerId, cancellationToken);
         
         if (volunteer is null)
             return Errors.General.NotFound(volunteerId);
