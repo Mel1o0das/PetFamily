@@ -54,11 +54,6 @@ namespace PetFamily.Infrastructure.Migrations
                         .HasColumnType("character varying(100)")
                         .HasColumnName("name");
 
-                    b.Property<string>("PhoneNumber")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("phone_number");
-
                     b.Property<int>("Status")
                         .HasColumnType("integer")
                         .HasColumnName("status");
@@ -131,6 +126,16 @@ namespace PetFamily.Infrastructure.Migrations
                                 .HasColumnName("weight");
                         });
 
+                    b.ComplexProperty<Dictionary<string, object>>("PhoneNumber", "PetFamily.Domain.Pets.Pet.PhoneNumber#PhoneNumber", b1 =>
+                        {
+                            b1.IsRequired();
+
+                            b1.Property<string>("Number")
+                                .IsRequired()
+                                .HasColumnType("text")
+                                .HasColumnName("phone_number");
+                        });
+
                     b.HasKey("Id")
                         .HasName("pk_pets");
 
@@ -197,7 +202,7 @@ namespace PetFamily.Infrastructure.Migrations
                         .IsRequired()
                         .HasMaxLength(1000)
                         .HasColumnType("character varying(1000)")
-                        .HasColumnName("description");
+                        .HasColumnName("volunteer_description");
 
                     b.ComplexProperty<Dictionary<string, object>>("DetailsForHelp", "PetFamily.Domain.Volunteers.Volunteer.DetailsForHelp#DetailsForHelp", b1 =>
                         {
@@ -215,38 +220,48 @@ namespace PetFamily.Infrastructure.Migrations
                                 .HasColumnName("details_for_help_requisites");
                         });
 
+                    b.ComplexProperty<Dictionary<string, object>>("Email", "PetFamily.Domain.Volunteers.Volunteer.Email#Email", b1 =>
+                        {
+                            b1.IsRequired();
+
+                            b1.Property<string>("EmailAddress")
+                                .IsRequired()
+                                .HasColumnType("text")
+                                .HasColumnName("volunteer_email");
+                        });
+
                     b.ComplexProperty<Dictionary<string, object>>("InformationAboutVolunteer", "PetFamily.Domain.Volunteers.Volunteer.InformationAboutVolunteer#InformationAboutVolunteer", b1 =>
                         {
                             b1.IsRequired();
 
-                            b1.Property<string>("Email")
-                                .IsRequired()
-                                .HasColumnType("text")
-                                .HasColumnName("information_about_volunteer_email");
-
                             b1.Property<int>("Experience")
                                 .HasColumnType("integer")
-                                .HasColumnName("information_about_volunteer_experience");
+                                .HasColumnName("volunteer_experience");
 
                             b1.Property<string>("Name")
                                 .IsRequired()
                                 .HasColumnType("text")
-                                .HasColumnName("information_about_volunteer_name");
+                                .HasColumnName("volunteer_name");
 
                             b1.Property<string>("Patronymic")
                                 .IsRequired()
                                 .HasColumnType("text")
-                                .HasColumnName("information_about_volunteer_patronymic");
-
-                            b1.Property<string>("PhoneNumber")
-                                .IsRequired()
-                                .HasColumnType("text")
-                                .HasColumnName("information_about_volunteer_phone_number");
+                                .HasColumnName("volunteer_patronymic");
 
                             b1.Property<string>("Surname")
                                 .IsRequired()
                                 .HasColumnType("text")
-                                .HasColumnName("information_about_volunteer_surname");
+                                .HasColumnName("volunteer_surname");
+                        });
+
+                    b.ComplexProperty<Dictionary<string, object>>("PhoneNumber", "PetFamily.Domain.Volunteers.Volunteer.PhoneNumber#PhoneNumber", b1 =>
+                        {
+                            b1.IsRequired();
+
+                            b1.Property<string>("Number")
+                                .IsRequired()
+                                .HasColumnType("text")
+                                .HasColumnName("volunteer_phone_number");
                         });
 
                     b.HasKey("Id")
@@ -346,8 +361,7 @@ namespace PetFamily.Infrastructure.Migrations
                             b1.Navigation("SocialNetworks");
                         });
 
-                    b.Navigation("SocialNetworksDetails")
-                        .IsRequired();
+                    b.Navigation("SocialNetworksDetails");
                 });
 
             modelBuilder.Entity("PetFamily.Domain.Species.Species", b =>

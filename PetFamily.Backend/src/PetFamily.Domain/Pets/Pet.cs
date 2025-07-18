@@ -1,5 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
 using PetFamily.Domain.Shared;
+using PetFamily.Domain.Volunteers;
 
 namespace PetFamily.Domain.Pets;
 
@@ -21,7 +22,7 @@ public class Pet : Shared.Entity<PetId>
         Address address,
         DateTime birthDate,
         DetailsForHelp detailsForHelp,
-        string phoneNumber)
+        PhoneNumber phoneNumber)
         : base(id)
     {
         Name = name;
@@ -47,7 +48,7 @@ public class Pet : Shared.Entity<PetId>
 
     public Address Address { get; private set; }
     
-    public string PhoneNumber { get; private set; }
+    public PhoneNumber PhoneNumber { get; private set; }
     
     public DateTime DateOfBirth { get; private set; }
 
@@ -66,7 +67,7 @@ public class Pet : Shared.Entity<PetId>
         Address? address,
         DateTime birthDate,
         DetailsForHelp? detailsForHelp,
-        string phoneNumber)
+        PhoneNumber phoneNumber)
     {
         if (string.IsNullOrWhiteSpace(name))
             return Errors.General.ValueIsInvalid("Pet name");
@@ -88,9 +89,6 @@ public class Pet : Shared.Entity<PetId>
         
         if (detailsForHelp is null)
             return Errors.General.ValueIsInvalid("Details for help");
-        
-        if (string.IsNullOrWhiteSpace(phoneNumber))
-            return Errors.General.ValueIsInvalid("PhoneNumber");
         
         var pet = new Pet(
             PetId.NewPetId(), 
