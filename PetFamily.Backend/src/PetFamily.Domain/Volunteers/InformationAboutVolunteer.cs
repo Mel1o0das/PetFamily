@@ -1,16 +1,15 @@
 ﻿using CSharpFunctionalExtensions;
+using PetFamily.Domain.Shared;
 
 namespace PetFamily.Domain.Volunteers;
 
 public record InformationAboutVolunteer
 {
-    private InformationAboutVolunteer(string surname, string name, string patronymic, string email, string phoneNumber, int experience)
+    private InformationAboutVolunteer(string surname, string name, string patronymic, int experience)
     {
         Surname = surname;
         Name = name;
         Patronymic = patronymic;
-        Email = email;
-        PhoneNumber = phoneNumber;
         Experience = experience;
     }
     
@@ -20,38 +19,26 @@ public record InformationAboutVolunteer
     
     public string Patronymic { get; }
     
-    public string Email { get; }
-    
-    public string PhoneNumber { get; }
-    
     public int Experience { get; }
 
-    public static Result<InformationAboutVolunteer> Create(
+    public static Result<InformationAboutVolunteer, Error> Create(
         string surname, 
         string name, 
         string patronymic, 
-        string email,
-        string phoneNumber,
         int experience)
     {
         if (string.IsNullOrWhiteSpace(surname))
-            return Result.Failure<InformationAboutVolunteer>("Surname is required");
+            return Errors.General.ValueIsRequired("surname");
         
         if(string.IsNullOrWhiteSpace(name))
-            return Result.Failure<InformationAboutVolunteer>("Name is required");
+            return Errors.General.ValueIsRequired("name");
         
         if(string.IsNullOrWhiteSpace(patronymic))
-            return Result.Failure<InformationAboutVolunteer>("Patronymic is required");
-        
-        if(string.IsNullOrWhiteSpace(email))
-            return Result.Failure<InformationAboutVolunteer>("Email is required");
-        
-        if(string.IsNullOrWhiteSpace(phoneNumber))
-            return Result.Failure<InformationAboutVolunteer>("Phone number is required");
+            return Errors.General.ValueIsRequired("patronymic");
         
         if(experience < 0)
-            return Result.Failure<InformationAboutVolunteer>("Experience cannot be negative");
+            return Errors.General.ValueIsInvalid("experience");
         
-        return new InformationAboutVolunteer(surname, name, patronymic, email, phoneNumber, experience);
+        return new InformationAboutVolunteer(surname, name, patronymic, experience);
     }
 }

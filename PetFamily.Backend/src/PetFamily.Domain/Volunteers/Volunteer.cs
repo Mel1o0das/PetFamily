@@ -17,20 +17,28 @@ public sealed class Volunteer : Shared.Entity<VolunteerId>
     private Volunteer(
         VolunteerId id, 
         InformationAboutVolunteer informationAboutVolunteer, 
+        PhoneNumber phoneNumber,
+        Email email,
         string description, 
         DetailsForHelp detailsForHelp)
         : base(id)
     {
         InformationAboutVolunteer = informationAboutVolunteer;
+        PhoneNumber = phoneNumber;
+        Email = email;
         Description = description;
         DetailsForHelp = detailsForHelp;
     }
     
     public InformationAboutVolunteer InformationAboutVolunteer { get; private set; }
     
+    public PhoneNumber PhoneNumber { get; private set; }
+    
+    public Email Email { get; private set; }
+    
     public string Description { get; private set; }
 
-    public SocialNetworksDetails SocialNetworksDetails { get; private set; }
+    public SocialNetworksDetails? SocialNetworksDetails { get; private set; }
     
     public DetailsForHelp DetailsForHelp { get; private set; }
 
@@ -44,6 +52,8 @@ public sealed class Volunteer : Shared.Entity<VolunteerId>
 
     public static Result<Volunteer, Error> Create(
         InformationAboutVolunteer? informationAboutVolunteer, 
+        PhoneNumber phoneNumber,
+        Email email,
         string description, 
         DetailsForHelp? detailsForHelp)
     {
@@ -56,7 +66,7 @@ public sealed class Volunteer : Shared.Entity<VolunteerId>
         if(detailsForHelp is null)
             return Errors.General.ValueIsInvalid("detailsForHelp");
         
-        var volunteer = new Volunteer(VolunteerId.NewVolunteerId(), informationAboutVolunteer, description, detailsForHelp);
+        var volunteer = new Volunteer(VolunteerId.NewVolunteerId(), informationAboutVolunteer, phoneNumber, email, description, detailsForHelp);
         
         return volunteer;
     }
