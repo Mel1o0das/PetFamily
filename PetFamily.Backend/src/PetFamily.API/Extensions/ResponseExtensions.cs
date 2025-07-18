@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PetFamily.API.Response;
 using PetFamily.Domain.Shared;
 
 namespace PetFamily.API.Extensions;
@@ -16,6 +17,8 @@ public static class ResponseExtensions
             _ => StatusCodes.Status500InternalServerError
         };
 
-        return new ObjectResult(error) { StatusCode = statusCode };
+        var envelop = Envelope.Error(error);
+
+        return new ObjectResult(envelop) { StatusCode = statusCode };
     }
 }
