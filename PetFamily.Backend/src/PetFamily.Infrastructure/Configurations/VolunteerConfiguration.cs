@@ -20,17 +20,26 @@ public class VolunteerConfiguration : IEntityTypeConfiguration<Volunteer>
 
         builder.ComplexProperty(v => v.InformationAboutVolunteer, vb =>
         {
-            vb.Property(v => v.Surname).IsRequired();
-            vb.Property(v => v.Name).IsRequired();
-            vb.Property(v => v.Patronymic).IsRequired();
-            vb.Property(v => v.Email).IsRequired();
-            vb.Property(v => v.PhoneNumber).IsRequired();
-            vb.Property(v => v.Experience).IsRequired();
+            vb.Property(v => v.Surname).IsRequired().HasColumnName("volunteer_surname");
+            vb.Property(v => v.Name).IsRequired().HasColumnName("volunteer_name");
+            vb.Property(v => v.Patronymic).IsRequired().HasColumnName("volunteer_patronymic");
+            vb.Property(v => v.Experience).IsRequired().HasColumnName("volunteer_experience");
+        });
+        
+        builder.ComplexProperty(v => v.Email, eb =>
+        {
+            eb.Property(e => e.EmailAddress).IsRequired().HasColumnName("volunteer_email");
+        });
+        
+        builder.ComplexProperty(v => v.PhoneNumber, pn =>
+        {
+            pn.Property(n => n.Number).IsRequired().HasColumnName("volunteer_phone_number");
         });
         
         builder.Property(v => v.Description)
             .IsRequired()
-            .HasMaxLength(Constants.MAX_HIGH_TEXT_LENGTH);
+            .HasMaxLength(Constants.Text.MAX_HIGH_TEXT_LENGTH)
+            .HasColumnName("volunteer_description");
 
         builder.OwnsOne(
             v => v.SocialNetworksDetails,
@@ -50,9 +59,12 @@ public class VolunteerConfiguration : IEntityTypeConfiguration<Volunteer>
         {
             vb.Property(v => v.Description)
                 .IsRequired()
-                .HasMaxLength(Constants.MAX_HIGH_TEXT_LENGTH);
+                .HasMaxLength(Constants.Text.MAX_HIGH_TEXT_LENGTH)
+                .HasColumnName("details_for_help_description");
             
-            vb.Property(v => v.Requisites).IsRequired();
+            vb.Property(v => v.Requisites)
+                .IsRequired()
+                .HasColumnName("details_for_help_requisites");
         });
 
         builder
