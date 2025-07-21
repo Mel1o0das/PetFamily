@@ -1,4 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
+using PetFamily.Domain.Shared;
+using PetFamily.Domain.Volunteers;
 
 namespace PetFamily.Domain.Pets;
 
@@ -20,7 +22,7 @@ public class Pet : Shared.Entity<PetId>
         Address address,
         DateTime birthDate,
         DetailsForHelp detailsForHelp,
-        string phoneNumber)
+        PhoneNumber phoneNumber)
         : base(id)
     {
         Name = name;
@@ -46,7 +48,7 @@ public class Pet : Shared.Entity<PetId>
 
     public Address Address { get; private set; }
     
-    public string PhoneNumber { get; private set; }
+    public PhoneNumber PhoneNumber { get; private set; }
     
     public DateTime DateOfBirth { get; private set; }
 
@@ -56,7 +58,7 @@ public class Pet : Shared.Entity<PetId>
     
     public DateTime DateCreated { get; private set; } = DateTime.Now;
 
-    public static Result<Pet> Create(
+    public static Result<Pet, Error> Create(
         string name, 
         string description, 
         SpeciesBreed? speciesBreed,
@@ -65,31 +67,28 @@ public class Pet : Shared.Entity<PetId>
         Address? address,
         DateTime birthDate,
         DetailsForHelp? detailsForHelp,
-        string phoneNumber)
+        PhoneNumber phoneNumber)
     {
         if (string.IsNullOrWhiteSpace(name))
-            return Result.Failure<Pet>("Name is required");
+            return Errors.General.ValueIsInvalid("Pet name");
         
         if (string.IsNullOrWhiteSpace(description))
-            return Result.Failure<Pet>("Description is required");
+            return Errors.General.ValueIsInvalid("Pet description");
         
         if (speciesBreed is null)
-            return Result.Failure<Pet>("Species Breed is required");
+            return Errors.General.ValueIsInvalid("Species breed");
         
         if (string.IsNullOrWhiteSpace(color))
-            return Result.Failure<Pet>("Color is required");
+            return Errors.General.ValueIsInvalid("Pet color");
         
         if(informationAboutHealth is null)
-            return Result.Failure<Pet>("Information About Health is required");
+            return Errors.General.ValueIsInvalid("Information about health");
         
         if (address is null)
-            return Result.Failure<Pet>("Address is required");
+            return Errors.General.ValueIsInvalid("Address");
         
         if (detailsForHelp is null)
-            return Result.Failure<Pet>("Details For Help is required");
-        
-        if (string.IsNullOrWhiteSpace(phoneNumber))
-            return Result.Failure<Pet>("Phone number is required");
+            return Errors.General.ValueIsInvalid("Details for help");
         
         var pet = new Pet(
             PetId.NewPetId(), 
@@ -103,6 +102,6 @@ public class Pet : Shared.Entity<PetId>
             detailsForHelp, 
             phoneNumber);
         
-        return Result.Success(pet);
+        return pet;
     }
 }

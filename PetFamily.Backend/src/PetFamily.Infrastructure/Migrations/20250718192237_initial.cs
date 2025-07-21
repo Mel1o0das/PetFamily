@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace PetFamily.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -28,16 +28,16 @@ namespace PetFamily.Infrastructure.Migrations
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
-                    description = table.Column<string>(type: "character varying(1000)", maxLength: 1000, nullable: false),
+                    volunteer_description = table.Column<string>(type: "character varying(1000)", maxLength: 1000, nullable: false),
                     details_for_help_description = table.Column<string>(type: "character varying(1000)", maxLength: 1000, nullable: false),
                     details_for_help_requisites = table.Column<string>(type: "text", nullable: false),
-                    information_about_volunteer_email = table.Column<string>(type: "text", nullable: false),
-                    information_about_volunteer_experience = table.Column<int>(type: "integer", nullable: false),
-                    information_about_volunteer_name = table.Column<string>(type: "text", nullable: false),
-                    information_about_volunteer_patronymic = table.Column<string>(type: "text", nullable: false),
-                    information_about_volunteer_phone_number = table.Column<string>(type: "text", nullable: false),
-                    information_about_volunteer_surname = table.Column<string>(type: "text", nullable: false),
-                    social_networks_details = table.Column<string>(type: "jsonb", nullable: false)
+                    volunteer_email = table.Column<string>(type: "text", nullable: false),
+                    volunteer_experience = table.Column<int>(type: "integer", nullable: false),
+                    volunteer_name = table.Column<string>(type: "text", nullable: false),
+                    volunteer_patronymic = table.Column<string>(type: "text", nullable: false),
+                    volunteer_surname = table.Column<string>(type: "text", nullable: false),
+                    volunteer_phone_number = table.Column<string>(type: "text", nullable: false),
+                    social_networks_details = table.Column<string>(type: "jsonb", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -73,7 +73,6 @@ namespace PetFamily.Infrastructure.Migrations
                     species_id = table.Column<Guid>(type: "uuid", nullable: false),
                     breed_id = table.Column<Guid>(type: "uuid", nullable: false),
                     color = table.Column<string>(type: "text", nullable: false),
-                    phone_number = table.Column<string>(type: "text", nullable: false),
                     date_of_birth = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     status = table.Column<int>(type: "integer", nullable: false),
                     date_created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
@@ -87,7 +86,8 @@ namespace PetFamily.Infrastructure.Migrations
                     height = table.Column<double>(type: "double precision", nullable: false),
                     is_castrated = table.Column<bool>(type: "boolean", nullable: false),
                     is_vaccinated = table.Column<bool>(type: "boolean", nullable: false),
-                    weight = table.Column<double>(type: "double precision", nullable: false)
+                    weight = table.Column<double>(type: "double precision", nullable: false),
+                    phone_number = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {

@@ -14,4 +14,11 @@ public record VolunteerId
     public static VolunteerId EmptyVolunteerId() => new VolunteerId(Guid.Empty);
 
     public static VolunteerId Create(Guid id) => new(id);
+    
+    public static implicit operator Guid(VolunteerId volunteerId)
+    { 
+        ArgumentNullException.ThrowIfNull(volunteerId);
+        
+        return volunteerId.Value;
+    }
 }

@@ -20,7 +20,8 @@ public class SpeciesConfiguration : IEntityTypeConfiguration<Species>
         
         builder.Property(s => s.Name)
             .IsRequired()
-            .HasMaxLength(Constants.MAX_LOW_TEXT_LENGTH);
+            .HasMaxLength(Constants.Text.MAX_LOW_TEXT_LENGTH)
+            .HasColumnName("name");
 
         builder.HasMany(b => b.Breeds)
             .WithOne()

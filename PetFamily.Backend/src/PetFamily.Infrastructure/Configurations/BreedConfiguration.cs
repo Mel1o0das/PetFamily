@@ -20,6 +20,7 @@ public class BreedConfiguration : IEntityTypeConfiguration<Breed>
         
         builder.Property(b => b.Name)
             .IsRequired()
-            .HasMaxLength(Constants.MAX_LOW_TEXT_LENGTH);
+            .HasMaxLength(Constants.Text.MAX_LOW_TEXT_LENGTH)
+            .HasColumnName("name");
     }
 }

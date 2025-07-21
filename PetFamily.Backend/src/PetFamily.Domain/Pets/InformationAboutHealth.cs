@@ -1,4 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
+using PetFamily.Domain.Shared;
 
 namespace PetFamily.Domain.Pets;
 
@@ -23,7 +24,7 @@ public record InformationAboutHealth
     
     public bool IsCastrated { get; }
 
-    public static Result<InformationAboutHealth> Create(
+    public static Result<InformationAboutHealth, Error> Create(
         string description, 
         double weight, 
         double height,
@@ -31,10 +32,10 @@ public record InformationAboutHealth
         bool isCastrated)
     {
         if(weight <= 0)
-            return Result.Failure<InformationAboutHealth>("Weight must be positive");
+            return Errors.General.ValueIsInvalid("weight");
         
         if(height <= 0)
-            return Result.Failure<InformationAboutHealth>("Height must be positive");
+            return Errors.General.ValueIsInvalid("height");
         
         return new InformationAboutHealth(description, weight, height, isVaccinated, isCastrated);
     }
