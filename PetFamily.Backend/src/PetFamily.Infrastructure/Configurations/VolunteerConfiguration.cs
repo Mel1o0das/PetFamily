@@ -36,10 +36,13 @@ public class VolunteerConfiguration : IEntityTypeConfiguration<Volunteer>
             pn.Property(n => n.Number).IsRequired().HasColumnName("volunteer_phone_number");
         });
         
-        builder.Property(v => v.Description)
-            .IsRequired()
-            .HasMaxLength(Constants.Text.MAX_HIGH_TEXT_LENGTH)
-            .HasColumnName("volunteer_description");
+        builder.ComplexProperty(v => v.Description, vd =>
+        {
+            vd.Property(d => d.Value)
+                .IsRequired()
+                .HasColumnName("volunteer_description")
+                .HasMaxLength(Constants.Text.MAX_HIGH_TEXT_LENGTH);
+        });
 
         builder.OwnsOne(
             v => v.SocialNetworksDetails,

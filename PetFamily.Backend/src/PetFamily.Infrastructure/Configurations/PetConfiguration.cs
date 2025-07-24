@@ -18,14 +18,22 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
             .HasConversion(
                 id => id.Value,
                 value => PetId.Create(value));
+
+        builder.ComplexProperty(p => p.Name, pn =>
+        {
+            pn.Property(n => n.Value)
+                .IsRequired()
+                .HasColumnName("name")
+                .HasMaxLength(Constants.Text.MAX_LOW_TEXT_LENGTH);
+        });
         
-        builder.Property(p => p.Name)
-            .IsRequired()
-            .HasMaxLength(Constants.Text.MAX_LOW_TEXT_LENGTH);
-        
-        builder.Property(p => p.Description)
-            .IsRequired()
-            .HasMaxLength(Constants.Text.MAX_HIGH_TEXT_LENGTH);
+        builder.ComplexProperty(p => p.Description, pd =>
+        {
+            pd.Property(d => d.Value)
+                .IsRequired()
+                .HasColumnName("description")
+                .HasMaxLength(Constants.Text.MAX_HIGH_TEXT_LENGTH);
+        });
 
         builder.OwnsOne(p => p.SpeciesBreed, pb =>
         {
@@ -41,8 +49,13 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
                     value => SpeciesId.Create(value))
                 .HasColumnName("species_id");
         });
-        
-        builder.Property(p => p.Color).IsRequired();
+
+        builder.ComplexProperty(p => p.Color, pc =>
+        {
+            pc.Property(c => c.Value)
+                .IsRequired()
+                .HasColumnName("color");
+        });
 
         builder.ComplexProperty(p => p.InformationAboutHealth, pb =>
         {

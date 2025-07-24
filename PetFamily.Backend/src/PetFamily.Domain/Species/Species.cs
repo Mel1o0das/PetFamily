@@ -1,5 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
 using PetFamily.Domain.Shared;
+using PetFamily.Domain.ValueObjects;
 
 namespace PetFamily.Domain.Species;
 
@@ -13,21 +14,18 @@ public class Species : Shared.Entity<SpeciesId>
     {
     }
 
-    private Species(SpeciesId id, string name)
+    private Species(SpeciesId id, Name name)
         : base(id)
     {
         Name = name;
     }
 
-    public string Name { get; private set; }
+    public Name Name { get; private set; }
     
     public IReadOnlyList<Breed> Breeds => _breeds;
 
-    public static Result<Species, Error> Create(string name)
+    public static Result<Species, Error> Create(Name name)
     {
-        if(string.IsNullOrWhiteSpace(name))
-            return Errors.General.ValueIsInvalid("species name");
-        
         var species = new Species(SpeciesId.NewSpeciesId(), name);
         
         return species;

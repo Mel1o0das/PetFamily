@@ -2,7 +2,7 @@
 using CSharpFunctionalExtensions;
 using PetFamily.Domain.Shared;
 
-namespace PetFamily.Domain.Volunteers;
+namespace PetFamily.Domain.ValueObjects;
 
 public record Email
 {

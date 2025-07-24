@@ -1,6 +1,8 @@
 ﻿using CSharpFunctionalExtensions;
+using PetFamily.Domain.Enums;
 using PetFamily.Domain.Pets;
 using PetFamily.Domain.Shared;
+using PetFamily.Domain.ValueObjects;
 
 namespace PetFamily.Domain.Volunteers;
 
@@ -19,7 +21,7 @@ public sealed class Volunteer : Shared.Entity<VolunteerId>
         InformationAboutVolunteer informationAboutVolunteer, 
         PhoneNumber phoneNumber,
         Email email,
-        string description, 
+        Description description, 
         DetailsForHelp detailsForHelp)
         : base(id)
     {
@@ -36,7 +38,7 @@ public sealed class Volunteer : Shared.Entity<VolunteerId>
     
     public Email Email { get; private set; }
     
-    public string Description { get; private set; }
+    public Description Description { get; private set; }
 
     public SocialNetworksDetails? SocialNetworksDetails { get; private set; }
     
@@ -51,22 +53,19 @@ public sealed class Volunteer : Shared.Entity<VolunteerId>
     public int CountPetsNeedHelp => _pets.Select(p => p.Status == HelpStatus.NEEDS_HELP).Count();
 
     public static Result<Volunteer, Error> Create(
-        InformationAboutVolunteer? informationAboutVolunteer, 
+        InformationAboutVolunteer informationAboutVolunteer, 
         PhoneNumber phoneNumber,
         Email email,
-        string description, 
-        DetailsForHelp? detailsForHelp)
+        Description description, 
+        DetailsForHelp detailsForHelp)
     {
-        if(informationAboutVolunteer is null)
-            return Errors.General.ValueIsInvalid("informationAboutVolunteer");
-
-        if(string.IsNullOrWhiteSpace(description))
-            return Errors.General.ValueIsInvalid("description");
-        
-        if(detailsForHelp is null)
-            return Errors.General.ValueIsInvalid("detailsForHelp");
-        
-        var volunteer = new Volunteer(VolunteerId.NewVolunteerId(), informationAboutVolunteer, phoneNumber, email, description, detailsForHelp);
+        var volunteer = new Volunteer(
+            VolunteerId.NewVolunteerId(), 
+            informationAboutVolunteer, 
+            phoneNumber, 
+            email, 
+            description, 
+            detailsForHelp);
         
         return volunteer;
     }
