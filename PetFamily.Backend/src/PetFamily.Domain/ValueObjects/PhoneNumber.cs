@@ -1,9 +1,8 @@
-﻿using System.Runtime.InteropServices.JavaScript;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 using CSharpFunctionalExtensions;
 using PetFamily.Domain.Shared;
 
-namespace PetFamily.Domain.Volunteers;
+namespace PetFamily.Domain.ValueObjects;
 
 public class PhoneNumber
 {

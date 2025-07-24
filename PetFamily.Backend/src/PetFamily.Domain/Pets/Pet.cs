@@ -1,5 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
+using PetFamily.Domain.Enums;
 using PetFamily.Domain.Shared;
+using PetFamily.Domain.ValueObjects;
 using PetFamily.Domain.Volunteers;
 
 namespace PetFamily.Domain.Pets;
@@ -14,10 +16,10 @@ public class Pet : Shared.Entity<PetId>
 
     private Pet(
         PetId id, 
-        string name, 
-        string description, 
+        Name name, 
+        Description description, 
         SpeciesBreed speciesBreed,
-        string color,
+        Color color,
         InformationAboutHealth informationAboutHealth,
         Address address,
         DateTime birthDate,
@@ -36,13 +38,13 @@ public class Pet : Shared.Entity<PetId>
         PhoneNumber = phoneNumber;
     }
 
-    public string Name { get; private set; }
+    public Name Name { get; private set; }
     
-    public string Description { get; private set; }
+    public Description Description { get; private set; }
     
     public SpeciesBreed SpeciesBreed { get; private set; }
     
-    public string Color { get; private set; }
+    public Color Color { get; private set; }
     
     public InformationAboutHealth InformationAboutHealth { get; private set; }
 
@@ -59,37 +61,16 @@ public class Pet : Shared.Entity<PetId>
     public DateTime DateCreated { get; private set; } = DateTime.Now;
 
     public static Result<Pet, Error> Create(
-        string name, 
-        string description, 
-        SpeciesBreed? speciesBreed,
-        string color,
-        InformationAboutHealth? informationAboutHealth,
-        Address? address,
+        Name name, 
+        Description description, 
+        SpeciesBreed speciesBreed,
+        Color color,
+        InformationAboutHealth informationAboutHealth,
+        Address address,
         DateTime birthDate,
-        DetailsForHelp? detailsForHelp,
+        DetailsForHelp detailsForHelp,
         PhoneNumber phoneNumber)
     {
-        if (string.IsNullOrWhiteSpace(name))
-            return Errors.General.ValueIsInvalid("Pet name");
-        
-        if (string.IsNullOrWhiteSpace(description))
-            return Errors.General.ValueIsInvalid("Pet description");
-        
-        if (speciesBreed is null)
-            return Errors.General.ValueIsInvalid("Species breed");
-        
-        if (string.IsNullOrWhiteSpace(color))
-            return Errors.General.ValueIsInvalid("Pet color");
-        
-        if(informationAboutHealth is null)
-            return Errors.General.ValueIsInvalid("Information about health");
-        
-        if (address is null)
-            return Errors.General.ValueIsInvalid("Address");
-        
-        if (detailsForHelp is null)
-            return Errors.General.ValueIsInvalid("Details for help");
-        
         var pet = new Pet(
             PetId.NewPetId(), 
             name, 
