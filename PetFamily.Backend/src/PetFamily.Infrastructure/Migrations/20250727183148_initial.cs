@@ -29,14 +29,13 @@ namespace PetFamily.Infrastructure.Migrations
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
                     volunteer_description = table.Column<string>(type: "character varying(1000)", maxLength: 1000, nullable: false),
-                    details_for_help_description = table.Column<string>(type: "character varying(1000)", maxLength: 1000, nullable: false),
-                    details_for_help_requisites = table.Column<string>(type: "text", nullable: false),
                     volunteer_email = table.Column<string>(type: "text", nullable: false),
                     volunteer_experience = table.Column<int>(type: "integer", nullable: false),
                     volunteer_name = table.Column<string>(type: "text", nullable: false),
                     volunteer_patronymic = table.Column<string>(type: "text", nullable: false),
                     volunteer_surname = table.Column<string>(type: "text", nullable: false),
                     volunteer_phone_number = table.Column<string>(type: "text", nullable: false),
+                    details_for_help = table.Column<string>(type: "jsonb", nullable: true),
                     social_networks_details = table.Column<string>(type: "jsonb", nullable: true)
                 },
                 constraints: table =>

@@ -19,6 +19,8 @@ public class CreateVolunteersHandler
         CreateVolunteerRequest request, 
         CancellationToken cancellationToken)
     {
+        var volunteerId = VolunteerId.NewVolunteerId();
+        
         var informationAboutVolunteerResult = InformationAboutVolunteer.Create(
             request.Surname,
             request.Name,
@@ -35,30 +37,45 @@ public class CreateVolunteersHandler
         var phoneNumberResult = PhoneNumber.Create(request.PhoneNumber);
         if(phoneNumberResult.IsFailure)
             return phoneNumberResult.Error;
-
-        var detailsForHelpResult = DetailsForHelp.Create(
-            request.Requisites,
-            request.DescriptionForHelp);
         
-        if(detailsForHelpResult.IsFailure)
-            return detailsForHelpResult.Error;
+        var detailsForHelpList = new List<DetailsForHelp>();
+        var detailsForHelpResult = request.DetailsForHelp
+           .Select(d => DetailsForHelp.Create(d.Requisites, d.Description));
+
+        foreach (var detailsForHelp in detailsForHelpResult) 
+        {
+           if (detailsForHelp.IsFailure)
+            return detailsForHelp.Error;
+           
+           detailsForHelpList.Add(detailsForHelp.Value);
+        }
         
         var descriptionResult = Description.Create(request.Description);
-        if(detailsForHelpResult.IsFailure)
-            return detailsForHelpResult.Error;
-        
-        var volunteer = Volunteer.Create(
+        if(descriptionResult.IsFailure)
+            return descriptionResult.Error;
+
+        var socialNetworksList = new List<SocialNetworks>();
+        var socialNetworksResult = request.SocialNetworks
+            .Select(s => SocialNetworks.Create(s.Name, s.Link));
+
+        foreach (var socialNetwork in socialNetworksResult)
+        {
+            if(socialNetwork.IsFailure)
+                return socialNetwork.Error;
+            socialNetworksList.Add(socialNetwork.Value);
+        }
+
+        var volunteer = new Volunteer(
+            volunteerId,
             informationAboutVolunteerResult.Value,
             phoneNumberResult.Value,
             emailResult.Value,
             descriptionResult.Value,
-            detailsForHelpResult.Value);
+            new DetailsForHelpList(detailsForHelpList),
+            new SocialNetworksDetails(socialNetworksList));
         
-        if(volunteer.IsFailure)
-            return volunteer.Error;
-        
-        await _volunteersRepository.Add(volunteer.Value, cancellationToken);
+        await _volunteersRepository.Add(volunteer, cancellationToken);
 
-        return (Guid)volunteer.Value.Id;
+        return volunteerId.Value;
     }
 }

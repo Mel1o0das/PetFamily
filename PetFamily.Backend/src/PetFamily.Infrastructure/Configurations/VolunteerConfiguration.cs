@@ -58,16 +58,14 @@ public class VolunteerConfiguration : IEntityTypeConfiguration<Volunteer>
                 });
             });
 
-        builder.ComplexProperty(v => v.DetailsForHelp, vb =>
+        builder.OwnsOne(v => v.DetailsForHelp, vd =>
         {
-            vb.Property(v => v.Description)
-                .IsRequired()
-                .HasMaxLength(Constants.Text.MAX_HIGH_TEXT_LENGTH)
-                .HasColumnName("details_for_help_description");
-            
-            vb.Property(v => v.Requisites)
-                .IsRequired()
-                .HasColumnName("details_for_help_requisites");
+            vd.ToJson();
+            vd.OwnsMany(r => r.DetailsForHelp, rd =>
+            {
+                rd.Property(r => r.Requisites).IsRequired().HasColumnName("requisite");
+                rd.Property(r => r.Description).IsRequired().HasColumnName("description");
+            });
         });
 
         builder

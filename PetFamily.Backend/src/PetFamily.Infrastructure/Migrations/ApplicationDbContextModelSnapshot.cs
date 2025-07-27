@@ -232,22 +232,6 @@ namespace PetFamily.Infrastructure.Migrations
                                 .HasColumnName("volunteer_description");
                         });
 
-                    b.ComplexProperty<Dictionary<string, object>>("DetailsForHelp", "PetFamily.Domain.Volunteers.Volunteer.DetailsForHelp#DetailsForHelp", b1 =>
-                        {
-                            b1.IsRequired();
-
-                            b1.Property<string>("Description")
-                                .IsRequired()
-                                .HasMaxLength(1000)
-                                .HasColumnType("character varying(1000)")
-                                .HasColumnName("details_for_help_description");
-
-                            b1.Property<string>("Requisites")
-                                .IsRequired()
-                                .HasColumnType("text")
-                                .HasColumnName("details_for_help_requisites");
-                        });
-
                     b.ComplexProperty<Dictionary<string, object>>("Email", "PetFamily.Domain.Volunteers.Volunteer.Email#Email", b1 =>
                         {
                             b1.IsRequired();
@@ -343,6 +327,54 @@ namespace PetFamily.Infrastructure.Migrations
 
             modelBuilder.Entity("PetFamily.Domain.Volunteers.Volunteer", b =>
                 {
+                    b.OwnsOne("PetFamily.Domain.ValueObjects.DetailsForHelpList", "DetailsForHelp", b1 =>
+                        {
+                            b1.Property<Guid>("VolunteerId")
+                                .HasColumnType("uuid");
+
+                            b1.HasKey("VolunteerId");
+
+                            b1.ToTable("volunteers");
+
+                            b1.ToJson("details_for_help");
+
+                            b1.WithOwner()
+                                .HasForeignKey("VolunteerId")
+                                .HasConstraintName("fk_volunteers_volunteers_id");
+
+                            b1.OwnsMany("PetFamily.Domain.ValueObjects.DetailsForHelp", "DetailsForHelp", b2 =>
+                                {
+                                    b2.Property<Guid>("DetailsForHelpListVolunteerId")
+                                        .HasColumnType("uuid");
+
+                                    b2.Property<int>("__synthesizedOrdinal")
+                                        .ValueGeneratedOnAdd()
+                                        .HasColumnType("integer");
+
+                                    b2.Property<string>("Description")
+                                        .IsRequired()
+                                        .HasColumnType("text")
+                                        .HasColumnName("description");
+
+                                    b2.Property<string>("Requisites")
+                                        .IsRequired()
+                                        .HasColumnType("text")
+                                        .HasColumnName("requisite");
+
+                                    b2.HasKey("DetailsForHelpListVolunteerId", "__synthesizedOrdinal");
+
+                                    b2.ToTable("volunteers");
+
+                                    b2.ToJson("details_for_help");
+
+                                    b2.WithOwner()
+                                        .HasForeignKey("DetailsForHelpListVolunteerId")
+                                        .HasConstraintName("fk_volunteers_volunteers_details_for_help_list_volunteer_id");
+                                });
+
+                            b1.Navigation("DetailsForHelp");
+                        });
+
                     b.OwnsOne("PetFamily.Domain.ValueObjects.SocialNetworksDetails", "SocialNetworksDetails", b1 =>
                         {
                             b1.Property<Guid>("VolunteerId")
@@ -388,6 +420,8 @@ namespace PetFamily.Infrastructure.Migrations
 
                             b1.Navigation("SocialNetworks");
                         });
+
+                    b.Navigation("DetailsForHelp");
 
                     b.Navigation("SocialNetworksDetails");
                 });

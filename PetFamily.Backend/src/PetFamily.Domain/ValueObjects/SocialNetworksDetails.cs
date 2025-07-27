@@ -2,5 +2,14 @@
 
 public record SocialNetworksDetails
 {
-    public List<SocialNetworks> SocialNetworks { get; }
+    private SocialNetworksDetails()
+    {
+    }
+
+    public SocialNetworksDetails(IEnumerable<SocialNetworks> socialNetworks)
+    {
+        SocialNetworks = socialNetworks.ToList();
+    }
+
+    public IReadOnlyList<SocialNetworks> SocialNetworks { get; } = [];
 }

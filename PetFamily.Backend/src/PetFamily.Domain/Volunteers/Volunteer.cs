@@ -16,13 +16,14 @@ public sealed class Volunteer : Shared.Entity<VolunteerId>
     {
     }
 
-    private Volunteer(
+    public Volunteer(
         VolunteerId id, 
         InformationAboutVolunteer informationAboutVolunteer, 
         PhoneNumber phoneNumber,
         Email email,
         Description description, 
-        DetailsForHelp detailsForHelp)
+        DetailsForHelpList? detailsForHelp,
+        SocialNetworksDetails? socialNetworksDetails)
         : base(id)
     {
         InformationAboutVolunteer = informationAboutVolunteer;
@@ -30,6 +31,7 @@ public sealed class Volunteer : Shared.Entity<VolunteerId>
         Email = email;
         Description = description;
         DetailsForHelp = detailsForHelp;
+        SocialNetworksDetails = socialNetworksDetails;
     }
     
     public InformationAboutVolunteer InformationAboutVolunteer { get; private set; }
@@ -42,7 +44,7 @@ public sealed class Volunteer : Shared.Entity<VolunteerId>
 
     public SocialNetworksDetails? SocialNetworksDetails { get; private set; }
     
-    public DetailsForHelp DetailsForHelp { get; private set; }
+    public DetailsForHelpList? DetailsForHelp { get; private set; }
 
     public IReadOnlyList<Pet> Pets => _pets;
     
@@ -51,22 +53,4 @@ public sealed class Volunteer : Shared.Entity<VolunteerId>
     public int CountPetsSearchHome => _pets.Select(p => p.Status == HelpStatus.LOOKING_HOME).Count();
 
     public int CountPetsNeedHelp => _pets.Select(p => p.Status == HelpStatus.NEEDS_HELP).Count();
-
-    public static Result<Volunteer, Error> Create(
-        InformationAboutVolunteer informationAboutVolunteer, 
-        PhoneNumber phoneNumber,
-        Email email,
-        Description description, 
-        DetailsForHelp detailsForHelp)
-    {
-        var volunteer = new Volunteer(
-            VolunteerId.NewVolunteerId(), 
-            informationAboutVolunteer, 
-            phoneNumber, 
-            email, 
-            description, 
-            detailsForHelp);
-        
-        return volunteer;
-    }
 }
