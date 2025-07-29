@@ -71,8 +71,8 @@ public class CreateVolunteersHandler
             phoneNumberResult.Value,
             emailResult.Value,
             descriptionResult.Value,
-            new DetailsForHelpList(detailsForHelpList),
-            new SocialNetworksDetails(socialNetworksList));
+            detailsForHelpList,
+            socialNetworksList);
         
         await _volunteersRepository.Add(volunteer, cancellationToken);
 

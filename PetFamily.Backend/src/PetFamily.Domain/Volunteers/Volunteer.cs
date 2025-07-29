@@ -9,6 +9,8 @@ namespace PetFamily.Domain.Volunteers;
 public sealed class Volunteer : Shared.Entity<VolunteerId>
 {
     private readonly List<Pet> _pets = [];
+    private readonly List<SocialNetworks> _socialNetworks = [];
+    private readonly List<DetailsForHelp> _detailsForHelp = [];
 
     // ef core
     private Volunteer(VolunteerId id)
@@ -22,16 +24,16 @@ public sealed class Volunteer : Shared.Entity<VolunteerId>
         PhoneNumber phoneNumber,
         Email email,
         Description description, 
-        DetailsForHelpList? detailsForHelp,
-        SocialNetworksDetails? socialNetworksDetails)
+        IEnumerable<DetailsForHelp>? detailsForHelp,
+        IEnumerable<SocialNetworks>? socialNetworks)
         : base(id)
     {
         InformationAboutVolunteer = informationAboutVolunteer;
         PhoneNumber = phoneNumber;
         Email = email;
         Description = description;
-        DetailsForHelp = detailsForHelp;
-        SocialNetworksDetails = socialNetworksDetails;
+        _detailsForHelp = detailsForHelp!.ToList();
+        _socialNetworks = socialNetworks!.ToList();
     }
     
     public InformationAboutVolunteer InformationAboutVolunteer { get; private set; }
@@ -41,10 +43,10 @@ public sealed class Volunteer : Shared.Entity<VolunteerId>
     public Email Email { get; private set; }
     
     public Description Description { get; private set; }
-
-    public SocialNetworksDetails? SocialNetworksDetails { get; private set; }
     
-    public DetailsForHelpList? DetailsForHelp { get; private set; }
+    public IReadOnlyList<SocialNetworks>? SocialNetworks => _socialNetworks;
+
+    public IReadOnlyList<DetailsForHelp>? DetailsForHelp => _detailsForHelp;
 
     public IReadOnlyList<Pet> Pets => _pets;
     

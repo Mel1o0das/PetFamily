@@ -36,7 +36,7 @@ namespace PetFamily.Infrastructure.Migrations
                     volunteer_surname = table.Column<string>(type: "text", nullable: false),
                     volunteer_phone_number = table.Column<string>(type: "text", nullable: false),
                     details_for_help = table.Column<string>(type: "jsonb", nullable: true),
-                    social_networks_details = table.Column<string>(type: "jsonb", nullable: true)
+                    social_networks = table.Column<string>(type: "jsonb", nullable: true)
                 },
                 constraints: table =>
                 {
