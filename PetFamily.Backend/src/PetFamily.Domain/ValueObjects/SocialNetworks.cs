@@ -5,6 +5,8 @@ namespace PetFamily.Domain.ValueObjects;
 
 public record SocialNetworks
 {
+    private SocialNetworks() { }
+    
     private SocialNetworks(string name, string link)
     {
         Name = name;

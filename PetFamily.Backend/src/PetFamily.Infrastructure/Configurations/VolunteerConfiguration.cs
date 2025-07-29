@@ -44,32 +44,30 @@ public class VolunteerConfiguration : IEntityTypeConfiguration<Volunteer>
                 .HasMaxLength(Constants.Text.MAX_HIGH_TEXT_LENGTH);
         });
 
-        builder.OwnsOne(
-            v => v.SocialNetworksDetails,
-            vb =>
-            {
-                vb.ToJson();
-                vb.OwnsMany(sn => sn.SocialNetworks, sb =>
-                {
-                    sb.Property(sn => sn.Name)
-                        .IsRequired();
-                    sb.Property(sn => sn.Link)
-                        .IsRequired();
-                });
-            });
-
-        builder.ComplexProperty(v => v.DetailsForHelp, vb =>
+        builder.OwnsMany(v => v.DetailsForHelp, vb =>
         {
-            vb.Property(v => v.Description)
+            vb.ToJson("details_for_help");
+
+            vb.Property(r => r.Requisites)
                 .IsRequired()
-                .HasMaxLength(Constants.Text.MAX_HIGH_TEXT_LENGTH)
-                .HasColumnName("details_for_help_description");
-            
-            vb.Property(v => v.Requisites)
+                .HasColumnName("requisite");
+            vb.Property(r => r.Description)
                 .IsRequired()
-                .HasColumnName("details_for_help_requisites");
+                .HasColumnName("description");
         });
 
+        builder.OwnsMany(v => v.SocialNetworks, snb =>
+        {
+            snb.ToJson("social_networks");
+            
+            snb.Property(sn => sn.Name)
+                .IsRequired()
+                .HasColumnName("social_network_name");
+            snb.Property(sn => sn.Link)
+                .IsRequired()
+                .HasColumnName("social_network_link");
+        });
+        
         builder
             .HasMany(v => v.Pets)
             .WithOne()

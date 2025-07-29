@@ -1,4 +1,6 @@
-﻿namespace PetFamily.Application.Volunteers.CreateVolunteer;
+﻿using PetFamily.Domain.ValueObjects;
+
+namespace PetFamily.Application.Volunteers.CreateVolunteer;
 
 public record CreateVolunteerRequest(
     string Surname,
@@ -8,5 +10,5 @@ public record CreateVolunteerRequest(
     string PhoneNumber,
     int Experience,
     string Description,
-    string Requisites,
-    string DescriptionForHelp);
+    IEnumerable<DetailsForHelpDto> DetailsForHelp,
+    IEnumerable<SocialNetworksDto> SocialNetworks);
