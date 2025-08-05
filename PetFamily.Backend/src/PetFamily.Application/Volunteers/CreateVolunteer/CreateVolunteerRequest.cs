@@ -1,6 +1,4 @@
-﻿using PetFamily.Domain.ValueObjects;
-
-namespace PetFamily.Application.Volunteers.CreateVolunteer;
+﻿namespace PetFamily.Application.Volunteers.CreateVolunteer;
 
 public record CreateVolunteerRequest(
     string Surname,
