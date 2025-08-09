@@ -17,7 +17,7 @@ public static class CustomValidation
             if(result.IsSuccess)
                 return;
             
-            context.AddFailure(result.Error.Message);
+            context.AddFailure(result.Error.Serialize());
         });
     } 
 }

@@ -30,35 +30,9 @@ public class VolunteersController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<Guid>> Create(
         [FromServices] CreateVolunteersHandler handler,
-        [FromServices] IValidator<CreateVolunteerRequest> validator,
         [FromBody] CreateVolunteerRequest request, 
         CancellationToken cancellationToken = default)
     {
-        var validationResult = await validator.ValidateAsync(request, cancellationToken);
-
-        if (!validationResult.IsValid)
-        {
-            var validationErrors = validationResult.Errors;
-
-            List<ResponseError> errors = [];
-            
-            foreach (var validationError in validationErrors)
-            {
-                var error = Error.Validation(validationError.ErrorCode, validationError.ErrorMessage);
-                
-                var responseError = new ResponseError(
-                    error.Code, 
-                    error.Message, 
-                    validationError.PropertyName);
-                
-                errors.Add(responseError);
-            }
-
-            var envelope = Envelope.Error(errors);
-            
-            return BadRequest(envelope);
-        }
-        
         var result = await handler.Handle(request, cancellationToken);
 
         if (result.IsFailure)
