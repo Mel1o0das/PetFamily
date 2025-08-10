@@ -1,4 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
+using FluentValidation;
 using PetFamily.Domain.Pets;
 using PetFamily.Domain.Shared;
 using PetFamily.Domain.ValueObjects;
@@ -10,7 +11,9 @@ public class CreateVolunteersHandler
 {
     private readonly IVolunteersRepository _volunteersRepository;
 
-    public CreateVolunteersHandler(IVolunteersRepository volunteersRepository)
+    public CreateVolunteersHandler(
+        IVolunteersRepository volunteersRepository,
+        IValidator<CreateVolunteerRequest> validator)
     {
         _volunteersRepository = volunteersRepository;
     }
@@ -21,22 +24,15 @@ public class CreateVolunteersHandler
     {
         var volunteerId = VolunteerId.NewVolunteerId();
         
-        var informationAboutVolunteerResult = InformationAboutVolunteer.Create(
+        var informationAboutVolunteer = InformationAboutVolunteer.Create(
             request.Surname,
             request.Name,
             request.Patronymic,
-            request.Experience);
+            request.Experience).Value;
         
-        if(informationAboutVolunteerResult.IsFailure)
-            return informationAboutVolunteerResult.Error;
+        var email = Email.Create(request.Email).Value;
         
-        var emailResult = Email.Create(request.Email);
-        if(emailResult.IsFailure)
-            return emailResult.Error;
-        
-        var phoneNumberResult = PhoneNumber.Create(request.PhoneNumber);
-        if(phoneNumberResult.IsFailure)
-            return phoneNumberResult.Error;
+        var phoneNumber = PhoneNumber.Create(request.PhoneNumber).Value;
         
         var detailsForHelpList = new List<DetailsForHelp>();
         var detailsForHelpResult = request.DetailsForHelp
@@ -50,10 +46,8 @@ public class CreateVolunteersHandler
            detailsForHelpList.Add(detailsForHelp.Value);
         }
         
-        var descriptionResult = Description.Create(request.Description);
-        if(descriptionResult.IsFailure)
-            return descriptionResult.Error;
-
+        var description = Description.Create(request.Description).Value;
+        
         var socialNetworksList = new List<SocialNetworks>();
         var socialNetworksResult = request.SocialNetworks
             .Select(s => SocialNetworks.Create(s.Name, s.Link));
@@ -67,10 +61,10 @@ public class CreateVolunteersHandler
 
         var volunteer = new Volunteer(
             volunteerId,
-            informationAboutVolunteerResult.Value,
-            phoneNumberResult.Value,
-            emailResult.Value,
-            descriptionResult.Value,
+            informationAboutVolunteer,
+            phoneNumber,
+            email,
+            description,
             detailsForHelpList,
             socialNetworksList);
         

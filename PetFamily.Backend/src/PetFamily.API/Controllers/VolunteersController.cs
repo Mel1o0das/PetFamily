@@ -1,7 +1,10 @@
+using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using PetFamily.API.Extensions;
+using PetFamily.API.Response;
 using PetFamily.Application.Volunteers.CreateVolunteer;
 using PetFamily.Application.Volunteers.GetVolunteer;
+using PetFamily.Domain.Shared;
 using PetFamily.Domain.Volunteers;
 
 namespace PetFamily.API.Controllers;
@@ -27,10 +30,10 @@ public class VolunteersController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<Guid>> Create(
         [FromServices] CreateVolunteersHandler handler,
-        [FromBody] CreateVolunteerRequest volunteer, 
+        [FromBody] CreateVolunteerRequest request, 
         CancellationToken cancellationToken = default)
     {
-        var result = await handler.Handle(volunteer, cancellationToken);
+        var result = await handler.Handle(request, cancellationToken);
 
         if (result.IsFailure)
             return result.Error.ToResponse();
